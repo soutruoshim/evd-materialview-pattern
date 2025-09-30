@@ -9,7 +9,9 @@ import com.eazybytes.cards.exception.ResourceNotFoundException;
 import com.eazybytes.cards.mapper.CardsMapper;
 import com.eazybytes.cards.repository.CardsRepository;
 import com.eazybytes.cards.service.ICardsService;
+import com.eazybytes.common.event.CardDataChangedEvent;
 import lombok.AllArgsConstructor;
+import org.axonframework.eventhandling.gateway.EventGateway;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -20,6 +22,7 @@ import java.util.Random;
 public class CardsServiceImpl implements ICardsService {
 
     private CardsRepository cardsRepository;
+    private EventGateway eventGateway;
 
     /**
      * @param card - Cards object
@@ -71,6 +74,12 @@ public class CardsServiceImpl implements ICardsService {
                 );
         card.setActiveSw(CardsConstants.IN_ACTIVE_SW);
         cardsRepository.save(card);
+
+        CardDataChangedEvent cardDataChangedEvent = new CardDataChangedEvent();
+        cardDataChangedEvent.setMobileNumber(card.getMobileNumber());
+        cardDataChangedEvent.setCardNumber(0L);
+        eventGateway.publish(cardDataChangedEvent);
+
         return true;
     }
 
