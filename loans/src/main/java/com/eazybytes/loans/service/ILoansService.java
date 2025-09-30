@@ -1,14 +1,15 @@
 package com.eazybytes.loans.service;
 
+import com.eazybytes.loans.command.event.LoanUpdatedEvent;
 import com.eazybytes.loans.dto.LoansDto;
+import com.eazybytes.loans.entity.Loans;
 
 public interface ILoansService {
 
     /**
-     *
-     * @param mobileNumber - Mobile Number of the Customer
+     * @param loan - Loans object
      */
-    void createLoan(String mobileNumber);
+    void createLoan(Loans loan);
 
     /**
      *
@@ -18,11 +19,10 @@ public interface ILoansService {
     LoansDto fetchLoan(String mobileNumber);
 
     /**
-     *
-     * @param loansDto - LoansDto Object
+     * @param event - LoanUpdatedEvent Object
      * @return boolean indicating if the update of card details is successful or not
      */
-    boolean updateLoan(LoansDto loansDto);
+    boolean updateLoan(LoanUpdatedEvent event);
 
     /**
      *
